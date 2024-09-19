@@ -1,16 +1,20 @@
 import { request } from "@playwright/test";
+import { faker } from "@faker-js/faker";
+
+const baseUrl = 'https://petstore.swagger.io/v2'
+const context = await request.newContext();
 
 export class User {
 
     userData({
-        id = 1,
-        username = "whk",
-        firstName = "Wirahadi",
-        lastName = "Kusuma",
-        email = "whk1234@gmail.com",
-        password = "lalaland123",
-        phone = "08188277882",
-        userStatus = 3
+        id = faker.number.int(),
+        username = faker.internet.userName(),
+        firstName = faker.person.firstName(),
+        lastName = faker.person.lastName(),
+        email = faker.internet.email(),
+        password = faker.internet.password(),
+        phone = faker.phone.number('8#########'),
+        userStatus = 1
     }) {
         return {
             id,
@@ -26,22 +30,17 @@ export class User {
     }
 
     async postCreateUser(customerData = {}) {
-        const context = await request.newContext();
-        const response = await context.post('https://petstore.swagger.io/v2/user', {
+        const response = await context.post(`${baseUrl}/user`, {
             data: this.userData(customerData),
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-
         return response
     }
 
     async getUser(username) {
-        const context = await request.newContext();
-        const response = await context.get(`https://petstore.swagger.io/v2/user/${username}`)
-
-
+        const response = await context.get(`${baseUrl}/user/${username}`)
         return response
     }
 }
