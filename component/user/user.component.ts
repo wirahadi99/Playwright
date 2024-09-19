@@ -2,7 +2,7 @@ import { request } from "@playwright/test";
 import { faker } from "@faker-js/faker";
 
 const baseUrl = 'https://petstore.swagger.io/v2'
-const context = await request.newContext();
+
 
 export class User {
 
@@ -30,6 +30,7 @@ export class User {
     }
 
     async postCreateUser(customerData = {}) {
+        const context = await request.newContext();
         const response = await context.post(`${baseUrl}/user`, {
             data: this.userData(customerData),
             headers: {
@@ -40,6 +41,7 @@ export class User {
     }
 
     async getUser(username) {
+        const context = await request.newContext();
         const response = await context.get(`${baseUrl}/user/${username}`)
         return response
     }
