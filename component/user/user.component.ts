@@ -1,5 +1,5 @@
-import { request } from "@playwright/test";
 import { faker } from "@faker-js/faker";
+import axios from "axios";
 
 const baseUrl = 'https://petstore.swagger.io/v2'
 
@@ -30,19 +30,24 @@ export class User {
     }
 
     async postCreateUser(customerData = {}) {
-        const context = await request.newContext();
-        const response = await context.post(`${baseUrl}/user`, {
+        
+        const res = await axios.post(`${baseUrl}/user`, {
             data: this.userData(customerData),
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-        return response
+        return res
     }
 
     async getUser(username) {
-        const context = await request.newContext();
-        const response = await context.get(`${baseUrl}/user/${username}`)
-        return response
+        const res = await axios.get(`${baseUrl}/user/${username}`)
+        return res
     }
+
+    async getPet(status) {
+        const res = await axios.get(`${baseUrl}/pet/findByStatus?status=${status}`)
+        return res
+    }
+    
 }
